@@ -1,7 +1,16 @@
 import { Request, Response } from 'express'
 import { service } from './service'
+import { Server } from 'socket.io'
 
 export const controler = {
+  addBlip: async (io: Server, data: { content: string }) => {
+    try {
+      const result = await service.addBlip(data)
+      io.emit('newBlip', result)
+    } catch (err) {
+      console.log(err)
+    }
+  },
   getBlips: async (req: Request, res: Response) => {
     try {
       const result = await service.getBlips()

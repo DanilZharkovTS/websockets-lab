@@ -4,6 +4,7 @@ import cors from 'cors'
 import { createServer } from 'node:http'
 import { Server } from 'socket.io'
 import { controler } from './controller'
+import { registerSockets } from './sockets'
 
 configDotenv()
 
@@ -16,9 +17,7 @@ app.use(express.json())
 const server = createServer(app)
 const io = new Server(server, { cors: { origin: '*' } })
 
-io.on('connection', () => {
-  console.log('user is connected')
-})
+registerSockets(io) 
 
 app.get('/blips', controler.getBlips)
 server.listen(port, () => console.log(`Example app listening on port ${port}!`))
