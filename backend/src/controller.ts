@@ -3,10 +3,10 @@ import { service } from './service'
 import { Server } from 'socket.io'
 
 export const controler = {
-  addBlip: async (io: Server, data: { content: string }) => {
+  addBlip: async (io: Server, data: { content: string; chatId: number }) => {
     try {
       const result = await service.addBlip(data)
-      io.emit('newBlip', result)
+      io.to(`blipChat:${data.chatId}`).emit('newBlip', result)
     } catch (err) {
       console.log(err)
     }
@@ -22,8 +22,8 @@ export const controler = {
   },
   deleteBlip: async (io: Server, blipId: number) => {
     try {
-      await service.deleteBlip(blipId)
-      io.emit('deleteBlip', { blipId })
+      const result = await service.deleteBlip(blipId)
+      io.to(`blipChat:${result.chatId}`).emit('deleteBlip', { blipId })
     } catch (err) {
       console.log(err)
     }

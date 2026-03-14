@@ -7,5 +7,5 @@ const socket = io(process.env.API_URL)
 
 socket.on('connect', () => {
   console.log('connected:', socket.id)
-  socket.emit('deleteBlip', {blipId: 68})
+  socket.emit('deleteBlip', { blipId: 72})
 })
