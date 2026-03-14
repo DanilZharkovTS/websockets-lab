@@ -3,6 +3,7 @@ import { configDotenv } from 'dotenv'
 import cors from 'cors'
 import { createServer } from 'node:http'
 import { Server } from 'socket.io'
+import { controler } from './controller'
 
 configDotenv()
 
@@ -19,7 +20,5 @@ io.on('connection', () => {
   console.log('user is connected')
 })
 
-app.get('/', (req, res) => {
-  res.send('Hello')
-})
+app.get('/blips', controler.getBlips)
 server.listen(port, () => console.log(`Example app listening on port ${port}!`))
