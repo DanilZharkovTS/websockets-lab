@@ -12,4 +12,18 @@ export const repo = {
   getAllBlips: () => {
     return pool.query(`SELECT * FROM blips`)
   },
+  findBlipById: (blipId: number) => {
+    return pool.query(
+      `SELECT * FROM blips 
+      WHERE id = $1`,
+      [blipId]
+    )
+  },
+  deleteBlip: (blipId: number) => {
+    return pool.query(
+      `DELETE FROM blips 
+      WHERE id = $1`,
+      [blipId]
+    )
+  },
 }

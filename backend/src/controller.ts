@@ -20,4 +20,12 @@ export const controler = {
       res.status(500).json('Server err')
     }
   },
+  deleteBlip: async (io: Server, blipId: number) => {
+    try {
+      await service.deleteBlip(blipId)
+      io.emit('deleteBlip', { blipId })
+    } catch (err) {
+      console.log(err)
+    }
+  },
 }
