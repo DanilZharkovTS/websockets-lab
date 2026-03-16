@@ -6,6 +6,10 @@ configDotenv()
 const socket = io(process.env.API_URL)
 
 socket.on('connect', () => {
-  socket.emit('joinBlipsChat', { chatId: 1 })
-  socket.emit('leaveBlipsChat', { chatId: 1 })
+  socket.emit('joinBlipsChat', { chatId: 2 })
+  socket.emit('addBlip', { chatId: 2, content: 'Yo yo yo' })
+
+  socket.on('newBlip', () => {
+    console.log('New blip has arrived')
+  })
 })

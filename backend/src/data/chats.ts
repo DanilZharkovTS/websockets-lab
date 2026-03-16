@@ -1,7 +1,6 @@
-
 export const chats = [
-  { id: 1, name: "Чат 1" },
-  { id: 2, name: "Чат 2" },
-  { id: 3, name: "Чат 3" },
-  { id: 4, name: "Чат 4" },
-];
+  { id: 1, name: 'Memes ex: 67' },
+  { id: 2, name: 'Games ex: roblox' },
+  { id: 3, name: 'Life ex: sybau' },
+  { id: 4, name: 'Thoughts ex: fuck me' },
+]
