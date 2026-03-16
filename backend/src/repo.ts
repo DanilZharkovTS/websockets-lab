@@ -9,8 +9,9 @@ export const repo = {
       [chatId, content]
     )
   },
-  getAllBlips: () => {
-    return pool.query(`SELECT * FROM blips`)
+  findBlipsByChatId: (chatId: number) => {
+    return pool.query(`SELECT * FROM blips
+      WHERE chat_id = $1`, [chatId])
   },
   findBlipById: (blipId: number) => {
     return pool.query(

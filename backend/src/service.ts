@@ -7,8 +7,8 @@ export const service = {
 
     return { blip: dbBlip }
   },
-  getBlips: async () => {
-    const blipsResult = await repo.getAllBlips()
+  getBlips: async (chatId: number) => {
+    const blipsResult = await repo.findBlipsByChatId(chatId)
     const dbBlips = blipsResult.rows
 
     return { blips: dbBlips }

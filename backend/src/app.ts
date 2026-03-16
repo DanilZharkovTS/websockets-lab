@@ -19,5 +19,5 @@ const io = new Server(server, { cors: { origin: '*' } })
 
 registerSockets(io) 
 
-app.get('/blips', controler.getBlips)
+app.get('/chats/:chatId', controler.getBlips)
 server.listen(port, () => console.log(`Example app listening on port ${port}!`))

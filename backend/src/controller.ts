@@ -13,7 +13,7 @@ export const controler = {
   },
   getBlips: async (req: Request, res: Response) => {
     try {
-      const result = await service.getBlips()
+      const result = await service.getBlips(Number(req.params.chatId))
       res.status(200).json(result)
     } catch (err) {
       console.log(err)
