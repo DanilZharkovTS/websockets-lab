@@ -1,14 +1,14 @@
 import { repo } from './repo'
 
 export const service = {
-  addBlip: async (body: { content: string }) => {
-    const blipResult = await repo.addBlip(body.content)
+  addBlip: async (body: { content: string; chatId: number }) => {
+    const blipResult = await repo.addBlip(body.chatId, body.content)
     const dbBlip = blipResult.rows[0]
 
     return { blip: dbBlip }
   },
-  getBlips: async () => {
-    const blipsResult = await repo.getAllBlips()
+  getBlips: async (chatId: number) => {
+    const blipsResult = await repo.findBlipsByChatId(chatId)
     const dbBlips = blipsResult.rows
 
     return { blips: dbBlips }
@@ -20,6 +20,6 @@ export const service = {
     if (!dbBlip) return
 
     await repo.deleteBlip(blipId)
-    return
+    return dbBlip
   },
 }
