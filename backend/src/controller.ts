@@ -1,16 +1,15 @@
 import { Request, Response } from 'express'
 import { service } from './service'
-import { Server, Socket } from 'socket.io'
+import { Server } from 'socket.io'
 
 export const controler = {
   addBlip: async (
-    socket: Socket,
+    io: Server,
     data: { content: string; chatId: number }
   ) => {
     try {
       const result = await service.addBlip(data)
-      socket.emit('sentBlip', result)
-      socket.to(`blipsChat:${data.chatId}`).emit('newBlip', result)
+      io.to(`blipsChat:${data.chatId}`).emit('newBlip', result)
     } catch (err) {
       console.log(err)
     }
@@ -24,10 +23,10 @@ export const controler = {
       res.status(500).json('Server err')
     }
   },
-  deleteBlip: async (socket: Socket, blipId: number) => {
+  deleteBlip: async (io: Server, blipId: number) => {
     try {
       const result = await service.deleteBlip(blipId)
-      socket.to(`blipsChat:${result.chatId}`).emit('deleteBlip', { blipId })
+      io.to(`blipsChat:${result.chatId}`).emit('deleteBlip', { blipId })
     } catch (err) {
       console.log(err)
     }

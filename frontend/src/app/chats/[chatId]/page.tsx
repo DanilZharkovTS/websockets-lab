@@ -1,5 +1,5 @@
 'use client'
-import { FormEvent, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Blip, IncomingBlipDTO } from './types'
 import io, { Socket } from 'socket.io-client'
 import { useParams } from 'next/navigation'
@@ -33,15 +33,21 @@ const ChatPage: React.FC = () => {
       }
     }
 
-    socket.on('sentBlip', (data: IncomingBlipDTO) => {
-      setBlips((prev) => [...prev, data.blip])
-    })
-
-    socket.on('newBlip', (data: IncomingBlipDTO) => {
-      setBlips((prev) => [...prev, data.blip])
-    })
-
     getChatBlips()
+
+    const handleNewBlip = (data: IncomingBlipDTO) => {
+      console.log('new blip')
+
+      setBlips((prev) => [...prev, data.blip])
+    }
+
+    socket.on('newBlip', handleNewBlip)
+
+    return () => {
+      socket.off('newBlip', handleNewBlip)
+      socket.emit('leaveBlipsChat', { chatId })
+      console.log('left chat')
+    }
   }, [chatId])
 
   const handleBlipAdd = (e: React.SyntheticEvent) => {

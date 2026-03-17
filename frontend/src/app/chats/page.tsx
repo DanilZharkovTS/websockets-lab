@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
 const chats = [
   { id: 1, name: 'Memes ex: 67', emoji: '😂' },
