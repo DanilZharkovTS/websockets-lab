@@ -5,3 +5,7 @@ export interface Blip {
   created_at: Date
   chat_id: number
 }
+
+export interface IncomingBlipDTO {
+  blip: Blip
+}

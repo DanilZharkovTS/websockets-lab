@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { Blip } from './types'
+import { Blip, IncomingBlipDTO } from './types'
 import io from 'socket.io-client'
 import { useParams } from 'next/navigation'
 import { chatService } from '../service'
@@ -10,7 +10,7 @@ let socket
 const ChatPage: React.FC = () => {
   const params = useParams()
   const chatId = params.chatId
-  const [blips, setBlips] = useState<Blip[] | null>(null)
+  const [blips, setBlips] = useState<Blip[] | []>([])
 
   useEffect(() => {
     const socketUrl = process.env.NEXT_PUBLIC_API_URL
@@ -28,6 +28,11 @@ const ChatPage: React.FC = () => {
         return
       }
     }
+
+    socket.on('newBlip', (data: IncomingBlipDTO) => {
+      setBlips((prev) => [...prev, data.blip])
+    })
+    
     getChatBlips()
   }, [chatId])
 
