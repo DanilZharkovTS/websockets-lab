@@ -1,16 +1,14 @@
 import { Request, Response } from 'express'
 import { service } from './service'
-import { Server } from 'socket.io'
+import { Server, Socket } from 'socket.io'
 
 export const controler = {
-  addBlip: async (
-    io: Server,
-    data: { content: string; chatId: number }
-  ) => {
+  addBlip: async (io: Server, socket: Socket, data: { content: string; chatId: number }) => {
     try {
       const result = await service.addBlip(data)
       io.to(`blipsChat:${data.chatId}`).emit('newBlip', result)
     } catch (err) {
+      socket.emit('failBlip')
       console.log(err)
     }
   },

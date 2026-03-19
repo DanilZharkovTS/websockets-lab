@@ -7,7 +7,7 @@ export const registerBlipSockets = (io: Server, socket: Socket) => {
     console.log('joined room')
   })
   socket.on('addBlip', async (data) => {
-    await controler.addBlip(io, data)
+    await controler.addBlip(io, socket, data)
     console.log('ADDED')
   })
   socket.on('deleteBlip', async (data) => {

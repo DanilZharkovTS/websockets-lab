@@ -5,6 +5,10 @@ export const service = {
     const blipResult = await repo.addBlip(body.chatId, body.content)
     const dbBlip = blipResult.rows[0]
 
+    if (!dbBlip) {
+      throw new Error('Error sending blip')
+    }
+
     return { blip: dbBlip }
   },
   getBlips: async (chatId: number) => {
