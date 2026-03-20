@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { Blip, IncomingBlipDTO } from './types'
+import { Blip, IncomingBlipDTO, IncomingLastReadBlipDTO } from './types'
 import io, { Socket } from 'socket.io-client'
 import { useParams } from 'next/navigation'
 import { chatService } from '../service'
@@ -35,15 +35,33 @@ const ChatPage: React.FC = () => {
 
     getChatBlips()
 
+    socket.emit('readBlips', { chatId })
+
+    const handleReadBlips = (data: IncomingLastReadBlipDTO) => {
+      const lastReadBlipId = data.lastReadBlip?.id
+      if (lastReadBlipId) {
+        setBlips((prev) =>
+          prev.map((b) =>
+            b.id <= lastReadBlipId && b.status !== 'read'
+              ? { ...b, status: 'read' }
+              : b
+          )
+        )
+      }
+    }
+
     const handleNewBlip = (data: IncomingBlipDTO) => {
       console.log('new blip')
 
       setBlips((prev) => [...prev, data.blip])
     }
 
+    socket.on('readBlips', handleReadBlips)
+
     socket.on('newBlip', handleNewBlip)
 
     return () => {
+      socket.off('readBlips', handleReadBlips)
       socket.off('newBlip', handleNewBlip)
       socket.emit('leaveBlipsChat', { chatId })
       console.log('left chat')
@@ -89,6 +107,7 @@ const ChatPage: React.FC = () => {
             <div className="text-[10px] text-zinc-200 mt-1">
               {new Date(b.created_at).toLocaleTimeString()}
             </div>
+            <div>{b.status}</div>
           </div>
         ))}
       </div>
