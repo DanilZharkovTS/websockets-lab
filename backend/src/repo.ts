@@ -10,13 +10,14 @@ export const repo = {
       [chatId, content]
     )
   },
-  updateBlipStatusById: (blipId: number, status: BlipStatus) => {
+  updateBlipsStatusReadByChatId: (chatId: number) => {
     return pool.query(
       `UPDATE blips
-      SET status = $1
-      WHERE id = $2
+      SET status = 'read'
+      WHERE chat_id = $1
+      AND status != 'read'
       RETURNING *`,
-      [status, blipId]
+      [chatId]
     )
   },
   findBlipsByChatId: (chatId: number) => {

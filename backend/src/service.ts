@@ -1,4 +1,5 @@
 import { repo } from './repo'
+import { Blip } from './types'
 
 export const service = {
   addBlip: async (body: { content: string; chatId: number }) => {
@@ -25,5 +26,19 @@ export const service = {
 
     await repo.deleteBlip(blipId)
     return dbBlip
+  },
+  readBlips: async (chatId: number) => {
+    const blipsResult = await repo.updateBlipsStatusReadByChatId(chatId)
+    const dbBlips: Blip[] = blipsResult.rows
+
+    if (dbBlips.length === 0) {
+      return { lastReadBlip: null }
+    }
+
+    const lastReadBlip: Blip = dbBlips.reduce((max, blip) => {
+      return blip.id > max.id ? blip : max
+    }, dbBlips[0]!)
+
+    return { lastReadBlip }
   },
 }

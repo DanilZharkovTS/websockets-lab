@@ -3,7 +3,11 @@ import { service } from './service'
 import { Server, Socket } from 'socket.io'
 
 export const controler = {
-  addBlip: async (io: Server, socket: Socket, data: { content: string; chatId: number }) => {
+  addBlip: async (
+    io: Server,
+    socket: Socket,
+    data: { content: string; chatId: number }
+  ) => {
     try {
       const result = await service.addBlip(data)
       io.to(`blipsChat:${data.chatId}`).emit('newBlip', result)
@@ -25,6 +29,14 @@ export const controler = {
     try {
       const result = await service.deleteBlip(blipId)
       io.to(`blipsChat:${result.chatId}`).emit('deleteBlip', { blipId })
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  readBlips: async (io: Server, chatId: number) => {
+    try {
+      const result = await service.readBlips(chatId)
+      io.to(`blipsChat:${chatId}`).emit('readBlips', result)
     } catch (err) {
       console.log(err)
     }

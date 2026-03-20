@@ -18,4 +18,10 @@ export const registerBlipSockets = (io: Server, socket: Socket) => {
     socket.leave(`blipChat:${data.chatId}`)
     console.log('left room')
   })
+
+  socket.on('readBlips', async (data) => {
+    await controler.readBlips(io, Number(data.chatId))
+    console.log('Read blips');
+  
+  })
 }
