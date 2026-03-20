@@ -1,4 +1,5 @@
 import { pool } from './cfg/pool'
+import { BlipStatus } from './types'
 
 export const repo = {
   addBlip: (chatId: number, content: string) => {
@@ -9,9 +10,22 @@ export const repo = {
       [chatId, content]
     )
   },
+  updateBlipsStatusReadByChatId: (chatId: number) => {
+    return pool.query(
+      `UPDATE blips
+      SET status = 'read'
+      WHERE chat_id = $1
+      AND status != 'read'
+      RETURNING *`,
+      [chatId]
+    )
+  },
   findBlipsByChatId: (chatId: number) => {
-    return pool.query(`SELECT * FROM blips
-      WHERE chat_id = $1`, [chatId])
+    return pool.query(
+      `SELECT * FROM blips
+      WHERE chat_id = $1`,
+      [chatId]
+    )
   },
   findBlipById: (blipId: number) => {
     return pool.query(

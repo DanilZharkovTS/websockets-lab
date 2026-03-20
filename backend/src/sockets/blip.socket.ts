@@ -7,7 +7,7 @@ export const registerBlipSockets = (io: Server, socket: Socket) => {
     console.log('joined room')
   })
   socket.on('addBlip', async (data) => {
-    await controler.addBlip(io, data)
+    await controler.addBlip(io, socket, data)
     console.log('ADDED')
   })
   socket.on('deleteBlip', async (data) => {
@@ -17,5 +17,11 @@ export const registerBlipSockets = (io: Server, socket: Socket) => {
   socket.on('leaveBlipsChat', (data) => {
     socket.leave(`blipChat:${data.chatId}`)
     console.log('left room')
+  })
+
+  socket.on('readBlips', async (data) => {
+    await controler.readBlips(io, Number(data.chatId))
+    console.log('Read blips');
+  
   })
 }
