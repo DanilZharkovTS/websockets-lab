@@ -104,10 +104,19 @@ const ChatPage: React.FC = () => {
           >
             <div className="text-sm">{b.content}</div>
 
-            <div className="text-[10px] text-zinc-200 mt-1">
-              {new Date(b.created_at).toLocaleTimeString()}
+            <div className="flex justify-end items-center gap-1 mt-1 text-[10px]">
+              <span className="text-zinc-300">
+                {new Date(b.created_at).toLocaleTimeString()}
+              </span>
+
+              <span
+                className={
+                  b.status === 'read' ? 'text-emerald-400' : 'text-zinc-400'
+                }
+              >
+                {b.status === 'read' ? '✓✓' : '✓'}
+              </span>
             </div>
-            <div>{b.status}</div>
           </div>
         ))}
       </div>
