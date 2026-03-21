@@ -9,7 +9,10 @@ const ChatPage: React.FC = () => {
   const params = useParams()
   const chatId = Number(params.chatId)
   const refSocket = useRef<typeof Socket | null>(null)
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
   const [blips, setBlips] = useState<Blip[] | []>([])
+  const [isTyping, setIsTyping] = useState<boolean>(false)
 
   const [contentInput, setContentInput] = useState<string>('')
 
@@ -56,13 +59,27 @@ const ChatPage: React.FC = () => {
       setBlips((prev) => [...prev, data.blip])
     }
 
+    const handleTyping = () => {
+      setIsTyping(true)
+    }
+
+    const handleStopTyping = () => {
+      setIsTyping(false)
+    }
+
     socket.on('readBlips', handleReadBlips)
 
     socket.on('newBlip', handleNewBlip)
 
+    socket.on('typing', handleTyping)
+
+    socket.on('stopTyping', handleStopTyping)
+
     return () => {
       socket.off('readBlips', handleReadBlips)
       socket.off('newBlip', handleNewBlip)
+      socket.off('typing', handleTyping)
+      socket.off('stopTyping', handleStopTyping)
       socket.emit('leaveBlipsChat', { chatId })
       console.log('left chat')
     }
@@ -75,6 +92,18 @@ const ChatPage: React.FC = () => {
 
     refSocket.current?.emit('addBlip', { chatId, content: contentInput })
     setContentInput('')
+  }
+
+  const handleTypingStatus = () => {
+    refSocket.current?.emit('typing', { chatId })
+
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current)
+    }
+
+    typingTimeoutRef.current = setTimeout(() => {
+      refSocket.current?.emit('stopTyping', { chatId })
+    }, 2000)
   }
 
   return (
@@ -125,10 +154,14 @@ const ChatPage: React.FC = () => {
         onSubmit={handleBlipAdd}
         className="p-3 border-t border-emerald-500"
       >
+        {isTyping && <div className="text-black">Someone is typing..</div>}
         <div className="flex gap-2">
           <input
             value={contentInput}
-            onChange={(e) => setContentInput(e.target.value)}
+            onChange={(e) => {
+              setContentInput(e.target.value)
+              handleTypingStatus()
+            }}
             placeholder="Type something..."
             className="flex-1 rounded-xl px-3 py-2 text-sm text-black outline-none border border-gray-200  focus:border-emerald-500"
           />
