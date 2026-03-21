@@ -150,11 +150,17 @@ const ChatPage: React.FC = () => {
         ))}
       </div>
 
+      <div className="min-h-[20px]">
+        {isTyping && (
+          <div className="px-4 pb-2 text-xs text-zinc-400 italic">
+            Someone is typing...
+          </div>
+        )}
+      </div>
       <form
         onSubmit={handleBlipAdd}
         className="p-3 border-t border-emerald-500"
       >
-        {isTyping && <div className="text-black">Someone is typing..</div>}
         <div className="flex gap-2">
           <input
             value={contentInput}
