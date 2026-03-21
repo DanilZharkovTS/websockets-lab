@@ -48,4 +48,11 @@ export const controler = {
       console.log(err)
     }
   },
+  stopTyping: (socket: Socket, chatId: number) => {
+    try {
+      socket.to(`blipsChat:${chatId}`).emit('stopTyping')
+    } catch (err) {
+      console.log(err)
+    }
+  },
 }

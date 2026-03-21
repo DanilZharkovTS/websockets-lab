@@ -27,4 +27,8 @@ export const registerBlipSockets = (io: Server, socket: Socket) => {
     controler.startTyping(socket, data.chatId)
     console.log('Start typing')
   })
+  socket.on('stopTyping', (data) => {
+    controler.stopTyping(socket, data.chatId)
+    console.log('Stop typing')
+  })
 }
