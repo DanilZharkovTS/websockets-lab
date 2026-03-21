@@ -21,7 +21,10 @@ export const registerBlipSockets = (io: Server, socket: Socket) => {
 
   socket.on('readBlips', async (data) => {
     await controler.readBlips(io, Number(data.chatId))
-    console.log('Read blips');
-  
+    console.log('Read blips')
+  })
+  socket.on('typing', (data) => {
+    controler.startTyping(socket, data.chatId)
+    console.log('Start typing')
   })
 }

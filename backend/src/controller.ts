@@ -41,4 +41,11 @@ export const controler = {
       console.log(err)
     }
   },
+  startTyping: (socket: Socket, chatId: number) => {
+    try {
+      socket.to(`blipsChat:${chatId}`).emit('typing')
+    } catch (err) {
+      console.log(err)
+    }
+  },
 }
